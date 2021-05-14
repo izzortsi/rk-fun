@@ -25,8 +25,8 @@ _θ = θ.reshape(n, n)
 k_size1 = 9
 k_size2 = k_size1 // 2 + 1
 k_size2
-window1 = gaussian(k_size1, std=np.sqrt(2) * k_size1 / np.sqrt(n))
-window2 = gaussian(k_size2, std=np.sqrt(2) * k_size2 / np.sqrt(n))
+window1 = gaussian(k_size1, std=np.sqrt(K) * k_size1 / np.sqrt(n))
+window2 = gaussian(k_size2, std=np.sqrt(K) * k_size2 / np.sqrt(n))
 plt.plot(window1)
 plt.plot(window2)
 window = np.convolve(np.fft.fftshift(window1), window2)
@@ -43,6 +43,7 @@ kernel_ = np.atleast_2d(window_).T * window_
 plt.imshow(kernel_)
 plt.imshow(convolve2d(kernel, kernel_))
 # %%
+kernel = convolve2d(kernel, kernel_)
 
 
 def F(t, θ):
@@ -67,7 +68,7 @@ def F(t, θ):
 integrator = Integrators["ForwardEuler"]()
 # %%
 
-ts, θs = integrator.solve(F, 0, 40, θ, 1)
+ts, θs = integrator.solve(F, 0, 2, θ, 0.1)
 NUM_TS = len(ts)
 θs = θs.reshape(NUM_TS, n, n)
 # %%
