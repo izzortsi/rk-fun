@@ -11,7 +11,7 @@ mpl.rcParams["image.interpolation"] = "none"
 # %%
 
 np.random.seed(0)
-n = 35
+n = 100
 N = n ** 2
 K = 1  # np.sqrt(np.pi / 4)
 ω = np.random.rand(N) * 2 * np.pi
@@ -25,7 +25,7 @@ _α = α.reshape(n, n)
 # _θ
 # %%
 # kernel = np.full((5, 5), 1 / 9) + np.diag([i for i in range(5)])
-k_size = 7
+k_size = 17
 
 
 window = gaussian(k_size, std=k_size / np.sqrt(n))
@@ -34,7 +34,7 @@ plt.plot(window)
 kernel = np.atleast_2d(window).T * window
 # %%
 
-
+plt.imshow(kernel)
 # %%
 
 
@@ -100,7 +100,5 @@ anim = animation.FuncAnimation(
 )
 # %%
 
-file_path = os.path.join(
-    KURAMOTO_OUTS, f"nonglobal_nonautonomous_kuramoto_K={K:.4f}.mp4"
-)
+file_path = os.path.join(KURAMOTO_OUTS, f"local_nonautonomous_kuramoto_K={K:.4f}.mp4")
 anim.save(file_path, fps=6)
