@@ -9,7 +9,7 @@ mpl.rcParams["image.interpolation"] = "none"
 # %%
 
 np.random.seed(0)
-n = 100  # BE WARY OF n^2 COUPLED ODEs TO BE SOLVED
+n = 50  # BE WARY OF n^2 COUPLED ODEs TO BE SOLVED
 N = n ** 2
 K = 1
 ω = np.random.rand(N) * 2 * np.pi
@@ -27,7 +27,7 @@ def F(t, θ):
 integrator = Integrators["ForwardEuler"]()
 # %%
 
-ts, θs = integrator.solve(F, 0, 80, θ, 0.1)
+ts, θs = integrator.solve(F, 0, 15, θ, 0.1)
 NUM_TS = len(ts)
 θs = θs.reshape(NUM_TS, n, n)
 # %%
@@ -56,5 +56,5 @@ anim = animation.FuncAnimation(
     blit=True,
 )
 # %%
-file_path = os.path.join(KURAMOTO_OUTS, "classic_kuramoto.mp4")
+file_path = os.path.join(KURAMOTO_OUTS, f"classic_kuramoto_K={K:.4f}.mp4")
 anim.save(file_path, fps=6)

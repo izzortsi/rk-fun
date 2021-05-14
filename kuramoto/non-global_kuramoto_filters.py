@@ -1,7 +1,8 @@
 # %%
 from imports import *
 import matplotlib as mpl
-from scipy.signal import convolve2d
+
+# from scipy.signal import convolve2d
 from scipy.signal.signaltools import wiener
 
 # %%
@@ -10,9 +11,9 @@ mpl.rcParams["image.interpolation"] = "none"
 # %%
 
 np.random.seed(0)
-n = 50
+n = 30
 N = n ** 2
-K = np.sqrt(np.pi)
+K = 1  # np.sqrt(np.pi)
 ω = np.random.rand(N) * 2 * np.pi
 _ω = ω.reshape(n, n)
 θ = np.random.rand(N) * 2 * np.pi
@@ -44,7 +45,7 @@ def F(t, θ):
 integrator = Integrators["ForwardEuler"]()
 # %%
 
-ts, θs = integrator.solve(F, 0, 60, θ, 1)
+ts, θs = integrator.solve(F, 0, 3, θ, 0.1)
 NUM_TS = len(ts)
 θs = θs.reshape(NUM_TS, n, n)
 # %%
@@ -53,8 +54,8 @@ NUM_TS = len(ts)
 # %%
 fig, ax = plt.subplots(figsize=(n // 10, n // 10))
 ax.set_axis_off()
-im = ax.imshow(θs[0], vmin=0, vmax=2 * np.pi)
-fig.colorbar(im)
+im = ax.imshow(θs[0])  # , vmin=0, vmax=2 * np.pi)
+# fig.colorbar(im)
 
 
 def init_plot():
@@ -76,5 +77,5 @@ anim = animation.FuncAnimation(
 )
 # %%
 
-file_path = os.path.join(KURAMOTO_OUTS, "nonglobal_kuramoto_filters.mp4")
+file_path = os.path.join(KURAMOTO_OUTS, f"nonglobal_kuramoto_filters_K={K:.4f}.mp4")
 anim.save(file_path, fps=6)

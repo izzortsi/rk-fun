@@ -10,7 +10,7 @@ mpl.rcParams["image.interpolation"] = "none"
 np.random.seed(0)
 n = 50
 N = n ** 2
-K = 1  # np.sqrt(np.pi / 2)
+K = np.sqrt(np.pi / 2)
 ω = np.random.rand(N) * 2 * np.pi
 _ω = ω.reshape(n, n)
 θ = np.random.rand(N) * 2 * np.pi
@@ -43,7 +43,7 @@ def F(t, θ):
 integrator = Integrators["ForwardEuler"]()
 # %%
 
-ts, θs = integrator.solve(F, 0, 20, θ, 0.1)
+ts, θs = integrator.solve(F, 0, 5, θ, 0.05)
 NUM_TS = len(ts)
 θs = θs.reshape(NUM_TS, n, n)
 # %%
@@ -74,5 +74,5 @@ anim = animation.FuncAnimation(
     interval=5,
 )
 # %%
-file_path = os.path.join(KURAMOTO_OUTS, "euclidean_kuramoto_K=1.mp4")
+file_path = os.path.join(KURAMOTO_OUTS, f"euclidean_kuramoto_K={K:.4f}.mp4")
 anim.save(file_path, fps=6)
