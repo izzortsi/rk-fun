@@ -10,7 +10,7 @@ mpl.rcParams["image.interpolation"] = "none"
 np.random.seed(0)
 n = 50
 N = n ** 2
-K = np.sqrt(np.pi / 2)
+K = 1  # np.sqrt(np.pi / 2)
 ω = np.random.rand(N) * 2 * np.pi
 _ω = ω.reshape(n, n)
 θ = np.random.rand(N) * 2 * np.pi
@@ -23,19 +23,15 @@ positions = np.array([np.array([i, j]) for i in range(n) for j in range(n)]).res
 
 
 def F(t, θ):
-
-    # dθ = dθ.reshape(n, n)
     _θ = θ.reshape(n, n)
     dθ = np.zeros_like(_θ)
     f = lambda θ_i, θ_j: np.sin(θ_j - θ_i)
     for i in range(n):
         for j in range(n):
-            # print(_θ[i, j])
-            # dθ[i] = ω[i] + (K / N) * np.sum(np.sin(θ - θ_i))
             phase_difference = f(_θ[i, j], _θ)
             distances = la.norm(positions - np.array([i, j]), axis=2)
-            distances[i, j] = n
-            distances = distances ** -2
+            distances[i, j] = n  # it couldn't be zero, right?
+            distances = distances ** -2  # because we want a pretty inverse-square law
             lconv = phase_difference * distances
             dθ[i, j] = _ω[i, j] + K * np.sum(lconv)
     return dθ.flatten()
@@ -47,7 +43,7 @@ def F(t, θ):
 integrator = Integrators["ForwardEuler"]()
 # %%
 
-ts, θs = integrator.solve(F, 0, 80, θ, 1)
+ts, θs = integrator.solve(F, 0, 20, θ, 0.1)
 NUM_TS = len(ts)
 θs = θs.reshape(NUM_TS, n, n)
 # %%
@@ -56,8 +52,8 @@ NUM_TS = len(ts)
 # %%
 fig, ax = plt.subplots(figsize=(n // 10, n // 10))
 ax.set_axis_off()
-im = ax.imshow(θs[0], vmin=0, vmax=2 * np.pi)
-fig.colorbar(im)
+im = ax.imshow(θs[0])  # , vmin=0, vmax=2 * np.pi)
+# fig.colorbar(im)
 # fig
 
 
@@ -78,5 +74,5 @@ anim = animation.FuncAnimation(
     interval=5,
 )
 # %%
-file_path = os.path.join(KURAMOTO_OUTS, "euclidean_kuramoto.mp4")
+file_path = os.path.join(KURAMOTO_OUTS, "euclidean_kuramoto_K=1.mp4")
 anim.save(file_path, fps=6)

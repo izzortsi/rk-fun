@@ -9,7 +9,7 @@ mpl.rcParams["image.interpolation"] = "none"
 # %%
 
 np.random.seed(0)
-n = 100
+n = 100  # BE WARY OF n^2 COUPLED ODEs TO BE SOLVED
 N = n ** 2
 K = 1
 ω = np.random.rand(N) * 2 * np.pi
@@ -31,13 +31,6 @@ ts, θs = integrator.solve(F, 0, 80, θ, 0.1)
 NUM_TS = len(ts)
 θs = θs.reshape(NUM_TS, n, n)
 # %%
-# θs[10]
-np.min(θs[10])
-np.max(θs[10])
-
-
-# %%
-
 
 fig, ax = plt.subplots(figsize=(n // 10, n // 10))
 ax.set_axis_off()
