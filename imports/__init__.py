@@ -4,7 +4,6 @@ import numpy as np
 import numpy.linalg as la
 import matplotlib.animation as animation
 from matplotlib import pyplot as plt
-from numba import jit
 from explicit_runge_kutta.explicit_rk import ExplicitRungeKutta
 from explicit_runge_kutta.integrators import Integrators
 
